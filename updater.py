@@ -112,6 +112,9 @@ class UpdateItem(webapp.RequestHandler):
                     deliv_box.owner = avname
                     deliv_box.location = location
                     deliv_box.put()
+
+            # If no version provided, set a default
+            version = version or 'NOVERSION'
             #look for an existing item with that name
             items = FreebieItem.gql("WHERE freebie_name = :1", name)
             item = items.get()
@@ -131,7 +134,10 @@ class UpdateItem(webapp.RequestHandler):
             else:
                 item.givers = []
                 logging.info("Clearing box list for item %s" % name)
-                item.freebie_version = version # will be '' for 3.7x collars
+                
+                # will be 'NOVERSION' for 3.7x collars
+                item.freebie_version = version 
+                
                 item.freebie_giver = giverkey
                 if giverurl != []:
                     if giverkey in item.givers:
