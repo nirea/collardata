@@ -1,0 +1,90 @@
+application: collardata
+version: 20110423
+runtime: python
+api_version: 1
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /cron/.*
+  script: cron.py
+  login: admin
+
+- url: /updater/.*
+  script: updater.py
+
+- url: /news/.*
+  static_files: static/blank.html
+  upload: static/blank.html
+
+- url: /db/.*
+  script: collardb.py
+
+- url: /owners/.*
+  script: owners.py
+
+- url: /removesub/.*
+  script: removesub.py
+
+- url: /dist/.*
+  script: dist.py
+  
+- url: /paiddist/.*
+  script: paiddist.py
+  
+- url: /cleanup/.*
+  script: cleanup.py
+
+- url: /remote/.*
+  script: remote_stub.py
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
+- url: /stats.*
+  script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
+  login: admin
+
+- url: /freebielist/.*
+  script: freebielist.py
+  login: admin
+
+- url: /textureserver/.*
+  script: textureserver.py
+
+- url: /vendorlocs/.*
+  script: vendorlocs.py
+
+- url: /alarm/.*
+  script: alarm.py
+
+- url: /avsync/.*
+  script: avsync.py
+
+- url: /groupname/.*
+  script: groupname.py
+  
+- url: /convert.*
+  script: convert.py
+
+# catcher for all other url to redirect them to the wiki. Please make sure this is the last py script reverenced in the api
+- url: /.*
+  script: wiki_redirect.py
+
+admin_console:
+  pages:
+  - name: Admin Console
+    url: /admin/
+  - name: Stats
+    url: /stats/
+  - name: Data
+    url: /_ah/datastore_admin/
+    
+builtins:
+  - datastore_admin: on

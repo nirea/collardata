@@ -1,0 +1,16 @@
+total_storage_limit: 150M
+queue:
+- name: default
+  rate: 0/s
+- name: Loader
+  rate: 1/m
+  bucket_size: 1
+- name: SlowConvert
+  rate: 10/m
+- name: FastConvert
+  rate: 50/m
+  bucket_size: 50
+- name: Disperse
+  rate: 1/m
+  bucket_size: 1
+  max_concurrent_requests: 1

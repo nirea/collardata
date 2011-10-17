@@ -1,0 +1,12 @@
+cron:
+- description: Cleanup vendor list ever 12 hours
+  url: /cron/CleanVendors
+  schedule: every 12 hours
+- description: Update item count every 15 min
+  url: /cron/UpdateCount
+  schedule: every 15 minutes synchronized
+- description: Update item count every 15 min
+  url: /cron/AccountNewRecords
+  schedule: every day 12:00
+  timezone: America/Los_Angeles
+  
