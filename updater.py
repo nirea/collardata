@@ -3,7 +3,6 @@
 #see LICENSE.txt for details
 
 import cgi
-import sys
 import os
 import logging
 import lindenip
@@ -14,12 +13,11 @@ import tools
 import string
 
 from google.appengine.ext import webapp
-from google.appengine.ext import db
 from google.appengine.api import memcache
 
 import yaml
 
-from model import FreebieItem, FreebieDelivery, Deliver
+from model import FreebieItem, Deliver
 
 null_key = "00000000-0000-0000-0000-000000000000"
 
@@ -121,13 +119,15 @@ class UpdateItem(webapp.RequestHandler):
                 newitem = FreebieItem(freebie_name = name, freebie_version = version, freebie_giver = giverkey, givers = giverurl, freebie_owner = avname, freebie_timedate = timestring, freebie_location = location)
                 newitem.put()
                 item = newitem
-            elif float(version.strip(string.whitespace+string.letters+"()!@#$%^&*~`")) < float(item.freebie_version.strip(string.whitespace+string.letters+"()!@#$%^&*~`")):
-                logging.warning('%s owned by %s tried to save item %s version %s and current version is %s' % (giverkey, avname, name, version, item.freebie_version))
+             # Version check removed because 3.7x and onwards does not include
+             # version numbers in object names. So this means that it's
+             # possible to downgrade and switch to delivering an older version. -Nan
+
             else:
-                if float(version.strip(string.whitespace+string.letters+"()!@#$%^&*~`")) > float(item.freebie_version.strip(string.whitespace+string.letters+"()!@#$%^&*~`")):
+                if version != item.freebie_version:
                     item.givers = []
-                    logging.info("New verision clearing box list")
-                item.freebie_version = version
+                    logging.info("Clearing box list for item %s" % name)
+                item.freebie_version = version # will be '' for 3.7x collars
                 item.freebie_giver = giverkey
                 if giverurl != []:
                     if giverkey in item.givers:
@@ -173,10 +173,14 @@ class DeliveryQueue(webapp.RequestHandler):
             logging.warning("Illegal attempt to check for item from %s, box %s located in %s at %s" % (self.request.headers['X-SecondLife-Owner-Name'], self.request.headers['X-SecondLife-Object-Name'], self.request.headers['X-SecondLife-Region'], self.request.headers['X-SecondLife-Local-Position']))
             self.error(403)
         else:
-            #get the deliveries where giverkey = key provided (this way we can still have multiple givers)
+            # get the deliveries where giverkey = key provided (this way we can
+            # still have multiple givers)
             giverkey = self.request.headers['X-SecondLife-Object-Key']
             givername = self.request.headers['X-SecondLife-Object-Name']
-            pop = cgi.escape(self.request.get('pop'))#true or false.  if true, then remove items from db on returning them
+            
+            # true or false.  if true, then remove items from db on returning them
+            pop = cgi.escape(self.request.get('pop'))
+            
             avname = self.request.headers['X-SecondLife-Owner-Name']
             logging.info('%s (%s) from %s checked' % (givername, giverkey, avname))
 
