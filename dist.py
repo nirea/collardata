@@ -42,7 +42,11 @@ class Deliver(webapp.RequestHandler):
                     logging.error('Error, freebie %s not found. Requested by %s using %s.' % (name, self.request.headers['X-SecondLife-Owner-Name'], self.request.headers['X-SecondLife-Object-Name']))
                     self.error(403)
                     return
-                name_version = "%s - %s" % (name, item['version'])
+                # Support new 3.7x collars that have no version in the name.
+                if item['version'] == 'NOVERSION':
+                    name_version = name
+                else:
+                    name_version = "%s - %s" % (name, item['version'])
                 rcpt = str(params['rcpt'])
                 if item['baseprice'] > 0:
                     self.response.out.write("NSO %s" % (name))
