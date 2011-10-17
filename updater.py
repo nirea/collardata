@@ -122,7 +122,12 @@ class UpdateItem(webapp.RequestHandler):
              # Version check removed because 3.7x and onwards does not include
              # version numbers in object names. So this means that it's
              # possible to downgrade and switch to delivering an older version. -Nan
-
+            
+            # TODO: Instead of having items identified only by name and
+            # version, allow them to be identified by name and UUID.  This will
+            # allow us to have unversioned items that are still delivered by
+            # multiple dist boxes, because we can tell if a box is out of sync
+            # by the item's UUID.
             else:
                 item.givers = []
                 logging.info("Clearing box list for item %s" % name)
