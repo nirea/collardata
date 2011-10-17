@@ -124,9 +124,8 @@ class UpdateItem(webapp.RequestHandler):
              # possible to downgrade and switch to delivering an older version. -Nan
 
             else:
-                if version != item.freebie_version:
-                    item.givers = []
-                    logging.info("Clearing box list for item %s" % name)
+                item.givers = []
+                logging.info("Clearing box list for item %s" % name)
                 item.freebie_version = version # will be '' for 3.7x collars
                 item.freebie_giver = giverkey
                 if giverurl != []:
