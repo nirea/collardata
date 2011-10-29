@@ -9,8 +9,9 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 shutdown_msg = ("The OpenCollar database has been disabled because of "
-                "price increases from Google.  For more information, "
-                "see the link below.\n"
+                "price increases from Google.  To avoid this message, please "
+                "update to the latest OpenCollar version.\n\n"
+                "See the link below for more information.\n\n"
                 "https://raw.github.com/nirea/ocupdater/master/docs/FAQ%20on%20OpenCollar%20Database%20Retirement.md")
 
 class MainPage(webapp.RequestHandler):
