@@ -7,7 +7,10 @@ adminkeys = ['2cad26af-c9b8-49c3-b2cd-2f6e2d808022',
               '98cb0179-bc9c-461b-b52c-32420d5ac8ef',
               'dbd606b9-52bb-47f7-93a0-c3e427857824',
               '8487a396-dc5a-4047-8a5b-ab815adb36f0',
-              'b6a9c46a-f74d-4e38-82ed-ab6be71c5c3f']
+              'b6a9c46a-f74d-4e38-82ed-ab6be71c5c3f',
+              'ff64c30a-198a-4415-8a33-7315fe74e160',
+              'a23ebb7f-64b2-4af2-9fa9-16b2f3fecd34',
+              'a6d249c9-0aa4-440b-98a6-c92d4bafafac']
 
 class Av(db.Model):
     id = db.StringProperty()
